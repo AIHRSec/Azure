@@ -5,6 +5,8 @@
 ## Directory.Read.All - required to retrieve the domain name.
 ## Connect-MgGraph -Scopes 'Directory.Read.All', 'User.ReadWrite.All'
 
+## Created by AIHRSec
+
 # Plans for future use
 Function Get-MgUserInfo {
     $users = Get-MgUser
@@ -55,7 +57,7 @@ Function CreateUser {
         }
     }
 
-    # Create the users
+    # Create the user
     for ($i = 1; $i -le 3; $i++) {
         # Randomly select a first name and last name
         $randomFirstName = Get-Random -InputObject $firstNames
@@ -66,12 +68,15 @@ Function CreateUser {
         $MailNickName = "$randomFirstName.$randomLastName"
         $UserPrincipalName = "$MailNickName@$domain"
 
+        # Creates the user
         New-MgUser -DisplayName $DisplayName -MailNickName $MailNickName -UserPrincipalName $UserPrincipalName @OtherAttributes
     }
+    # Print password used
     Write-Output ("Here is the password for the account(s) created: " + $OtherAttributes.PasswordProfile.Password)
 }
 
-Function Check-Permission {
+# Checks if the current session has the required permissions
+Function CheckPermission {
     # Get the current context
     $context = Get-MgContext
 
@@ -80,10 +85,9 @@ Function Check-Permission {
 
     return $CorrectScopes
 }
-# Example usage
-if (Check-Permission) {
+if (CheckPermission) {
     Write-Output "Your session has the required permissions to run this script successfully."
-    #CreateUser
+    #CreateUser # Calls the CreateUser function
 } else {
     Write-Warning "Your session does not contain the required permissions. Please connect to Graph PowerShell with Directory.Read.All and User.ReadWrite.All. You can add those permissions by running the following command and consenting to the permissions creates."
     Write-Host -ForegroundColor Green "Connect-MgGraph -Scopes 'Directory.Read.All', 'User.ReadWrite.All'" 
