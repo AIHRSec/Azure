@@ -1,6 +1,6 @@
 ## This script is create multiple users by using Microsoft Graph PowerShell.
 ## Graph PowerShell requires specific permissions to be able to create users and view directory info.
-## That being said, the following permissions are required.
+## That being said, the following permissions are required:
 ## User.ReadWrite.All - required to create user(s).
 ## Directory.Read.All - required to retrieve the domain name.
 ## Connect-MgGraph -Scopes 'Directory.Read.All', 'User.ReadWrite.All'
