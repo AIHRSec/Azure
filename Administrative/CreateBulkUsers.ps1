@@ -1,3 +1,5 @@
+## SCRIPT IS NOT WORKING - The if else logic is not working
+
 ## This script is create multiple users by using Microsoft Graph PowerShell.
 ## Graph PowerShell requires specific permissions to be able to create users and view directory info.
 ## That being said, the following permissions are required:
@@ -89,16 +91,15 @@ Function CheckPermission {
 if (CheckPermission) {
     Write-Host -ForegroundColor Green "Your session has the required permissions to run this script successfully."
     $NumUsers = Read-Host "How many user's would you like to create? "
-    if (isInt($NumUsers) -eq $true and $NumUsers -gt 0){
+    if ($NumUsers -is [int] -and $NumUsers -gt 0){
         CreateUser # Calls the CreateUser function
-    } elseif (isInt($NumUsers) -eq $false) {
+    } elseif ($NumUsers -isnot [int] ){
         Write-Warning "Invalid input silly: Input should be an integer"
     } elseif ($NumUsers -le 0){
         Write-Warning "Invalid input: Input should be great than 0"
-    } else {
-        Write-Host "I don't know how you got here ¯\_(ツ)_/¯"
+    } else{
+        Write-Output "I don't know how you got here ¯\_(.-.)_/¯"
     }
-    
 } else {
     Write-Warning "Your session does not contain the required permissions. Please connect to Graph PowerShell with Directory.Read.All and User.ReadWrite.All. You can add those permissions by running the following command and consenting to the permissions creates."
     Write-Host -ForegroundColor Green "Connect-MgGraph -Scopes 'Directory.Read.All', 'User.ReadWrite.All'" 
