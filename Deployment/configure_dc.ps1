@@ -8,8 +8,10 @@ param (
 )
 
 function Postreboot_ConfigureDC {
+New-Item -Path C:\Temp -Type Directory
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/AIHRSec/Azure/refs/heads/main/Deployment/postreboot_configure_dc.ps1 -OutFile C:\
 
-$scriptPath = "C:\scripts\PostReboot-Configure-DC.ps1"
+$scriptPath = "C:\scripts\postreboot_configure_dc.ps1"
 $scheduledTaskName = "ConfigureDomainPostReboot"
 
 # Save the post-reboot script to a file
