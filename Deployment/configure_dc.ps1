@@ -1,7 +1,7 @@
 # Define parameters
 param (
     [string]$DomainName = "ipt.net",
-    [string]$DomainNetbiosName = "IPT",
+    [string]$DomainNetbiosName = "IPT.NET",
     [string]$AdminName = "ipt_admin",
     [string]$ServerName = "ipt-dc",
     [securestring]$AdminPassword
