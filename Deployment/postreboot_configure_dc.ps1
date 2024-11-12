@@ -1,7 +1,3 @@
-# Import modules
-Import-Module ADDSDeployment
-Import-Module ActiveDirectory
-
 # Basic Hardening Steps
 Disable-WindowsOptionalFeature -Online -FeatureName smb1protocol -NoRestart # Disable SMBv1
 
@@ -29,16 +25,6 @@ $regConfig | ConvertFrom-Csv | ForEach-Object {
     Write-Host "Setting " $_.regKey
     New-ItemProperty -Path $_.regKey -Name $_.name -Value $_.value -PropertyType $_.type -force
 }
-
-# Save the post-reboot script to a file
-New-Item -Path $scriptPath -ItemType File -Force
-Set-Content -Path $scriptPath -Value $scriptContent
-
-# Create a scheduled task to run the post-reboot script after reboot
-$action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-File $scriptPath"
-$trigger = New-ScheduledTaskTrigger -AtStartup -Delay "00:05:00"
-$principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -RunLevel Highest
-Register-ScheduledTask -TaskName $scheduledTaskName -Action $action -Trigger $trigger -Principal $principal
 
 # Restart the server to complete AD DS installation
 Restart-Computer -Force
