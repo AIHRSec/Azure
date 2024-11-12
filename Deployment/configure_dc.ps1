@@ -24,8 +24,7 @@ $trigger = New-ScheduledTaskTrigger -Once -AtStartup -Delay "00:02:30"
 $principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -RunLevel Highest
 Register-ScheduledTask -TaskName $scheduledTaskName -Action $action -Trigger $trigger -Principal $principal
 
-# Restart the server to complete AD DS installation
-Restart-Computer -Force
+#Restart-Computer -Force
 }
 Postreboot_ConfigureDC
 
@@ -51,6 +50,6 @@ Install-ADDSForest `
     -SafeModeAdministratorPassword $AdminPassword `
     -InstallDNS `
     -Force
-
-# Reboot
+Sleep -Seconds 45
+# Restart the server to complete AD DS installation
 Restart-Computer -Force
