@@ -148,3 +148,8 @@ Set-Content -Path $indexPath -Value $indexContent -Encoding UTF8
 Restart-Service -Name "W3SVC"
 }
 IIS_Config
+
+# Restart the server following the complete of installation
+Write-Host "Rebooting server in 20 seconds"
+Start-Sleep -Seconds 20
+Restart-Computer -Force
