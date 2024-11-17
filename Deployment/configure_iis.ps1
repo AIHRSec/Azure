@@ -1,4 +1,4 @@
-function Precheck {    
+function precheck {    
 
 # Get Hostname
 $currentName = HOSTNAME.EXE
@@ -36,14 +36,15 @@ $regConfig | ConvertFrom-Csv | ForEach-Object {
 }
 
 # Set Language
-Install-Language es-CO -CopyToSettings
+#Install-Language es-CO -CopyToSettings
 Set-WinSystemLocale es-CO
+Set-WinUILanguageOverride es-CO
 #Set-WinUserLanguageList es-CO -Force
 
 }
-Precheck
+precheck
 
-function IIS_Config {
+function iis_config {
 
 # Install IIS
 Install-WindowsFeature -name Web-Server -IncludeManagementTools
@@ -147,7 +148,35 @@ New-Website -Name $website -Port 80 -PhysicalPath "C:\inetpub\wwwroot\$website" 
 Set-Content -Path $indexPath -Value $indexContent -Encoding UTF8
 Restart-Service -Name "W3SVC"
 }
-IIS_Config
+iis_config
+
+function configure_logging {
+# Import the WebAdministration module
+Import-Module WebAdministration
+
+# Get the list of all IIS sites
+$sites = Get-Website
+
+# Loop through each site to get the logging configuration
+foreach ($site in $sites) {
+    $siteName = $site.name
+    
+    # Get the logging configuration for the site
+    $logPath = Get-WebConfigurationProperty -Filter "system.applicationHost/sites/site[@name='$siteName']/logFile" -name "directory"
+    $logFormat = Get-WebConfigurationProperty -Filter "system.applicationHost/sites/site[@name='$siteName']/logFile" -name "logFormat"
+    $logPeriod = Get-WebConfigurationProperty -Filter "system.applicationHost/sites/site[@name='$siteName']/logFile" -name "period"
+    $logTruncateSize = Get-WebConfigurationProperty -Filter "system.applicationHost/sites/site[@name='$siteName']/logFile" -name "truncateSize"
+
+    # Display the site name and its logging configuration
+    Write-Output "Site Name: $siteName"
+    Write-Output "Log Path: $logPath"
+    Write-Output "Log Format: $logFormat"
+    Write-Output "Log Period: $logPeriod"
+    Write-Output "Log Truncate Size: $logTruncateSize"
+    Write-Output ""
+}
+    
+}
 
 # Restart the server following the complete of installation
 Write-Host "Rebooting server in 20 seconds"
